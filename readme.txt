@@ -10,6 +10,12 @@ Solitaire的玩法：
 setTimeout() 方法用于在指定的毫秒数后调用函数或计算表达式。是window对象的一个方法
 3 秒（3000 毫秒）后弹出 "Hello" :
 setTimeout(function(){ alert("Hello"); }, 3000);
-
+cc.director.loadScene切换场景
+        setTimeout(()=>{
+            cc.director.loadScene('GameScene',()=>{
+                console.log(">>> this is onGameScene lunched callback!");
+            });
+        },3000
+        );
 
 
