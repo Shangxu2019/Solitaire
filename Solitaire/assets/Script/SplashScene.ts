@@ -10,10 +10,10 @@ export default class SplashScene extends cc.Component {
         // init logic
         this.label.string = '这里是加载场景';
         setTimeout(()=>{
-            cc.director.loadScene('GameScene',()=>{
-                console.log(">>> this is onGameScene lunched callback!");
+            cc.director.loadScene('StartScene',()=>{
+                console.log(">>> this is StartScene lunched callback!");
             });
-        },3000
+        },0
         );
     }
 }
