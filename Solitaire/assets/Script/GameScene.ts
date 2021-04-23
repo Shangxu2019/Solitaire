@@ -9,6 +9,12 @@ export default class GameScene extends cc.Component {
     label: cc.Label = null;
 
     private m_gameCtrl:GameCtrl = null;
+
+    @property(cc.Prefab)
+    pokerPrefab:cc.Prefab = null;
+
+    @property(cc.Node)
+    pokerContainer:cc.Node = null;
     onLoad(){
         console.log(">>> GameScene:onload");
     }
@@ -18,6 +24,7 @@ export default class GameScene extends cc.Component {
         console.log(">>> GameScene:start");
 
         this.m_gameCtrl = new GameCtrl();
+        this.m_gameCtrl.init(this.pokerPrefab,this.pokerContainer);
         this.m_gameCtrl.start();
     }
 }
