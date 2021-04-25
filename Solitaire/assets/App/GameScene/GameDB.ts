@@ -37,7 +37,12 @@ export default class GameDB{
     /*************************************************************************
     *public API
     **************************************************************************/
-    
+    public Start(){
+        let temp = this._closeAreaPokers;
+        this._closeAreaPokers = this._pokers;
+        this._pokers = temp;
+        //通知UI层发生变化
+    }
 
    /*************************************************************************
     *private API

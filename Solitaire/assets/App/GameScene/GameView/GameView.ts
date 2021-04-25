@@ -21,6 +21,19 @@ export default class GameView extends cc.Component {
     start () {
 
     }
+    Start(){
+        let stack:cc.Node[] = [];
+        let children = this.initPokerArea.children;
+
+        for(let i = children.length-1;i>=0;--i){
+            let child = children[i];
+            stack.push(child);
+            this.initPokerArea.removeChild(child);
+        }
+        for(let i = stack.length-1;i>=0;--i){
+            this.closeSendArea.addChild(stack[i]);
+        }
+    }
     public initPokers(pokers:Poker[]){
         pokers.forEach((poker,index)=>{
             let uiPoker = this.creatUIPoker(poker);

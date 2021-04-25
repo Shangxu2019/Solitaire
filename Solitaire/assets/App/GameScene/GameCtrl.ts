@@ -20,6 +20,10 @@ export default class GameCtrl{
     }
 
     public start():void{
+        //移动牌到发牌区
+        this.m_gameDB.Start();
+        //数据驱动UI，通知view数据发生改变
+        this.m_gameView.Start();
      }
      
 }
