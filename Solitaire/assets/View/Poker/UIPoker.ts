@@ -1,4 +1,4 @@
-import { Esuit } from "./EnumConfig";
+import { Esuit } from "../../Script/EnumConfig";
 import Poker from "./Poker";
 const {ccclass, property} = cc._decorator;
 

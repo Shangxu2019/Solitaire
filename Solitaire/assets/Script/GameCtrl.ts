@@ -1,5 +1,6 @@
-import Poker from "./Poker";
-import UIPoker from "./UIPoker";
+import GameView from "../View/GameView/GameView";
+import Poker from "../View/Poker/Poker";
+import UIPoker from "../View/Poker/UIPoker";
 
 /*
 游戏牌局管理者
@@ -7,12 +8,12 @@ import UIPoker from "./UIPoker";
 export default class GameCtrl{
     //扑克数据
     private pokers:Poker[] = [];
-    private pokerPrefab:cc.Prefab = null;
-    private pokerContainer:cc.Node = null;
-    public init(ipokerprefab:cc.Prefab,ipokerContainer:cc.Node){
-        this.pokerPrefab = ipokerprefab;
-        this.pokerContainer = ipokerContainer;
+    //UI
+    private m_gameView:GameView = null;
+    public init(igameView:GameView){
+        this.m_gameView = igameView;
     }
+
     public start():void{
         //初始化扑克
         for(let point = 1;point <= 13;point++){
@@ -21,19 +22,8 @@ export default class GameCtrl{
                 this.pokers.push(poker);
             }
         }
-        console.log('GameCtrl:start');
-        console.log(this.pokers);
-        this.pokers.forEach(poker=>{
-            let uiPoker = this.creatUIPoker(poker);
-            this.pokerContainer.addChild(uiPoker.node);
-            uiPoker.node.setPosition(Math.random()*500,Math.random()*500);
-        });
+        this.m_gameView.creatPokers(this.pokers);
+        
      }
-     creatUIPoker(poker:Poker):UIPoker{
-        //创建UIPoker
-        let uiPokerNode = cc.instantiate(this.pokerPrefab);
-        let uiPoker = uiPokerNode.getComponent('UIPoker');
-        uiPoker.init(poker);
-        return uiPoker;
-     }
+     
 }

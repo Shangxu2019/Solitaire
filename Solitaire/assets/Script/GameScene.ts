@@ -1,30 +1,28 @@
+import GameView from "../View/GameView/GameView";
 import GameCtrl from "./GameCtrl";
-
 const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class GameScene extends cc.Component {
 
-    // @property(cc.Label)
-    // label: cc.Label = null;
-
+    //获取gameview的预制
+    @property(cc.Prefab)
+    gameViewPrefab:cc.Prefab = null;
+    //MVC形式
+    //view
+    private m_gameView:GameView = null;
+    //ctrl
     private m_gameCtrl:GameCtrl = null;
 
-    @property(cc.Prefab)
-    pokerPrefab:cc.Prefab = null;
-
-    @property(cc.Node)
-    pokerContainer:cc.Node = null;
     onLoad(){
         console.log(">>> GameScene:onload");
     }
     start () {
-        // init logic
-        //this.label.string = '这里是游戏场景';
-        console.log(">>> GameScene:start");
-
+        //动态加载gameview
+        this.m_gameView = cc.instantiate(this.gameViewPrefab).getComponent(GameView);
+        this.node.addChild(this.m_gameView.node);
         this.m_gameCtrl = new GameCtrl();
-        this.m_gameCtrl.init(this.pokerPrefab,this.pokerContainer);
+        this.m_gameCtrl.init(this.m_gameView);
         this.m_gameCtrl.start();
     }
 }
