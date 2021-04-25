@@ -1,5 +1,4 @@
-import { Esuit } from "../../Script/EnumConfig";
-
+import { Esuit } from "../../EnumConfig";
 
 //扑克数据结构
 export default class Poker{

@@ -1,29 +1,25 @@
 import GameView from "../View/GameView/GameView";
 import Poker from "../View/Poker/Poker";
 import UIPoker from "../View/Poker/UIPoker";
+import GameDB from "./GameDB";
 
 /*
 游戏牌局管理者
 */
 export default class GameCtrl{
-    //扑克数据
-    private pokers:Poker[] = [];
+
+    //构建数据库
+    private m_gameDB:GameDB = null;
     //UI
     private m_gameView:GameView = null;
     public init(igameView:GameView){
+        //创建数据库
+        this.m_gameDB = GameDB.creat();
         this.m_gameView = igameView;
     }
 
     public start():void{
-        //初始化扑克
-        for(let point = 1;point <= 13;point++){
-            for(let suit = 0;suit <= 3;suit++){
-                let poker = new Poker(point,suit);
-                this.pokers.push(poker);
-            }
-        }
-        this.m_gameView.creatPokers(this.pokers);
-        
+        this.m_gameView.creatPokers(this.m_gameDB.pokers);
      }
      
 }
