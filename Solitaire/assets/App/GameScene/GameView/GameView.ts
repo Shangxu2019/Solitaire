@@ -1,5 +1,5 @@
-import Poker from "../Poker/Poker";
-import UIPoker from "../Poker/UIPoker";
+import UIPoker from "../../View/UIPoker/UIPoker";
+import GameDB, { Poker } from "../GameDB";
 
 const {ccclass, property} = cc._decorator;
 @ccclass
@@ -15,12 +15,14 @@ export default class GameView extends cc.Component {
     //玩牌
     @property(cc.Node) PlayAreaAnchor:cc.Node = null;
     private PlayAreaOriginList:cc.Node[] = [];
+    private m_gameDB:GameDB = null;
 
     start () {
 
     }
-    public creatPokers(pokers:Poker[]){
-        pokers.forEach((poker,index)=>{
+    public initWithDB(gameDB:GameDB){
+        this.m_gameDB = gameDB;
+        this.m_gameDB.closeAreaPokers.forEach((poker,index)=>{
             let uiPoker = this.creatUIPoker(poker);
             this.closeSendArea.addChild(uiPoker.node);
             uiPoker.node.x = 0.5*index;

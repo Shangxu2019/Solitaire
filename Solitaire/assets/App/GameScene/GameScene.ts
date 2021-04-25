@@ -1,5 +1,6 @@
-import GameView from "../View/GameView/GameView";
+
 import GameCtrl from "./GameCtrl";
+import GameView from "./GameView/GameView";
 const {ccclass, property} = cc._decorator;
 
 @ccclass

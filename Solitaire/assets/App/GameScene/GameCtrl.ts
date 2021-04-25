@@ -1,7 +1,5 @@
-import GameView from "../View/GameView/GameView";
-import Poker from "../View/Poker/Poker";
-import UIPoker from "../View/Poker/UIPoker";
 import GameDB from "./GameDB";
+import GameView from "./GameView/GameView";
 
 /*
 游戏牌局管理者
@@ -19,7 +17,7 @@ export default class GameCtrl{
     }
 
     public start():void{
-        this.m_gameView.creatPokers(this.m_gameDB.pokers);
+        this.m_gameView.initWithDB(this.m_gameDB);
      }
      
 }

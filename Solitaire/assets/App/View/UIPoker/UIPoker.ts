@@ -1,6 +1,6 @@
 
 import { Esuit } from "../../EnumConfig";
-import Poker from "./Poker";
+import { Poker } from "../../GameScene/GameDB";
 const {ccclass, property} = cc._decorator;
 
 const poker_Map = {
