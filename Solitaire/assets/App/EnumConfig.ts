@@ -1,7 +1,12 @@
 //花色
-export enum Esuit{
-    HeiTao = 0,   
-    HongXin,
-    MeiHua,
-    FangKuai,
+export enum ESuit{
+    HEITAO = 0,   
+    HONGXIN,
+    MEIHUA,
+    FANGKUAI,
+}
+//牌朝向
+export enum EPokerStatus{
+    CLOSE = 0,
+    OPEN,
 }

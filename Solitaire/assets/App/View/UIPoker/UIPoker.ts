@@ -1,5 +1,5 @@
 
-import { Esuit } from "../../EnumConfig";
+import { EPokerStatus, ESuit } from "../../EnumConfig";
 import { Poker } from "../../GameScene/GameDB";
 const {ccclass, property} = cc._decorator;
 
@@ -21,12 +21,18 @@ const poker_Map = {
 @ccclass
 export default class UIPoker extends cc.Component{
     @property(cc.Sprite)
+    bgSprite:cc.Sprite = null;
+    @property(cc.Sprite)
     smallSuitSprite:cc.Sprite = null;
     @property(cc.Sprite)
     bigSuitSprite:cc.Sprite = null;
-
     @property(cc.Label)
     pointLabel: cc.Label = null;
+
+    @property(cc.SpriteFrame)
+    pokerClosebg: cc.SpriteFrame = null;
+    @property(cc.SpriteFrame)
+    pokerOpenbg: cc.SpriteFrame = null;
 
     @property([cc.SpriteFrame])
     smallSuits:cc.SpriteFrame[] = [];
@@ -41,14 +47,27 @@ export default class UIPoker extends cc.Component{
 
     public init(poker:Poker){
         this.pointLabel.string = `${poker_Map[poker.point]}`;
-        this.pointLabel.node.color = (poker.suit == Esuit.FangKuai || poker.suit == Esuit.HongXin)?this.redPointLabel:this.blackPointLabel;
+        this.pointLabel.node.color = (poker.suit == ESuit.FANGKUAI || poker.suit == ESuit.HONGXIN)?this.redPointLabel:this.blackPointLabel;
         this.smallSuitSprite.spriteFrame = this.smallSuits[poker.suit];
         if(poker.point<=10){
             this.bigSuitSprite.spriteFrame = this.bigSuits[poker.suit];
         }else{
             this.bigSuitSprite.spriteFrame = this.bigExSuits[poker.point-11];
         }
-        
+        this.setStatus(poker.status);
     }
-    
+    private setStatus(status:EPokerStatus){
+        if(status ==  EPokerStatus.CLOSE){
+            this.smallSuitSprite.node.active = false;
+            this.bigSuitSprite.node.active = false;
+            this.pointLabel.node.active = false;
+            this.bgSprite.spriteFrame = this.pokerClosebg;
+        }else{
+            this.smallSuitSprite.node.active = true;
+            this.bigSuitSprite.node.active = true;
+            this.pointLabel.node.active = true;
+            this.bgSprite.spriteFrame = this.pokerOpenbg;
+        }
+             
+    }
 }

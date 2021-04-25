@@ -592,6 +592,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "bgSprite": {
+      "__id__": 14
+    },
     "smallSuitSprite": {
       "__id__": 8
     },
@@ -600,6 +603,12 @@
     },
     "pointLabel": {
       "__id__": 12
+    },
+    "pokerClosebg": {
+      "__uuid__": "00fdc2bb-6193-472c-9450-cf20a0e44ee4"
+    },
+    "pokerOpenbg": {
+      "__uuid__": "61603f90-7e79-4ef1-8853-e23cfe0867e9"
     },
     "smallSuits": [
       {

@@ -3,16 +3,21 @@
 游戏牌局数据
 */
 
-import { Esuit } from "../EnumConfig";
+import { EPokerStatus, ESuit } from "../EnumConfig";
 
 //扑克数据结构
 export class Poker{
-    public point:number = -1; //点数
-    public suit:Esuit = Esuit.HeiTao;//花色
-    constructor(ipoint?:number,isuit?:Esuit){
-        if(ipoint){ this.point = ipoint;}
-        if(isuit){ this.suit = isuit ; }
+    public get point(){return this._point;}
+    public get suit(){return this._suit;}
+    public get status(){return this._status;}
+    public _point:number = -1; //点数
+    public _suit:ESuit = ESuit.HEITAO;//花色
+    public _status:EPokerStatus = EPokerStatus.CLOSE;//状态
 
+    constructor(ipoint?:number,isuit?:ESuit,istatus?:EPokerStatus){
+        if(ipoint){ this._point = ipoint;}
+        if(isuit){ this._suit = isuit ; }
+        if(istatus){ this._status = istatus ; }
     }
 }
 export class PokerGroup{
@@ -50,7 +55,7 @@ export default class GameDB{
         //初始化扑克
         for(let point = 1;point <= 13;point++){
             for(let suit = 0;suit <= 3;suit++){
-                let poker = new Poker(point,suit);
+                let poker = new Poker(point,suit,EPokerStatus.CLOSE);
                 this._pokers.push(poker);
             }
         }

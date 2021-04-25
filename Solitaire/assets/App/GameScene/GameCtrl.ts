@@ -11,13 +11,15 @@ export default class GameCtrl{
     //UI
     private m_gameView:GameView = null;
     public init(igameView:GameView){
+        this.m_gameView = igameView;
         //创建数据库
         this.m_gameDB = GameDB.creat();
-        this.m_gameView = igameView;
+        //初始化UI牌
+        this.m_gameView.initPokers(this.m_gameDB.pokers);
+        
     }
 
     public start():void{
-        this.m_gameView.initWithDB(this.m_gameDB);
      }
      
 }
