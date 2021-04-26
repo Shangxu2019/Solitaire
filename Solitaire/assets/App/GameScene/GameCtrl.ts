@@ -1,4 +1,6 @@
+import EventManager from "../../GameFrameWork/Event/EventManager";
 import GameDB from "./GameDB";
+import GameEvent from "./GameEvent";
 import GameView from "./GameView/GameView";
 
 /*
@@ -12,18 +14,20 @@ export default class GameCtrl{
     private m_gameView:GameView = null;
     public init(igameView:GameView){
         this.m_gameView = igameView;
+        
+        EventManager.getInstance().on(GameEvent.INIT_POKER,this.m_gameView.onEventInit,this.m_gameView);
+        EventManager.getInstance().on(GameEvent.PLAY,this.m_gameView.onEventPlay,this.m_gameView);
         //创建数据库
         this.m_gameDB = GameDB.creat();
-        //初始化UI牌
-        this.m_gameView.initPokers(this.m_gameDB.pokers);
         
     }
 
     public start():void{
         //移动牌到发牌区
-        this.m_gameDB.Start();
-        //数据驱动UI，通知view数据发生改变
-        this.m_gameView.Start();
+        this.m_gameDB.Play();
      }
-     
+     public Exit(){
+        EventManager.getInstance().off(GameEvent.INIT_POKER,this.m_gameView.onEventInit,this.m_gameView);
+        EventManager.getInstance().off(GameEvent.PLAY,this.m_gameView.onEventPlay,this.m_gameView);
+     }
 }

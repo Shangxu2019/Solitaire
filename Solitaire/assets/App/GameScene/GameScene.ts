@@ -26,4 +26,7 @@ export default class GameScene extends cc.Component {
         this.m_gameCtrl.init(this.m_gameView);
         this.m_gameCtrl.start();
     }
+    onDestroy(){
+        this.m_gameCtrl.Exit();
+    }
 }

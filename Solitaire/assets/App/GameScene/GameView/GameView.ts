@@ -21,7 +21,7 @@ export default class GameView extends cc.Component {
     start () {
 
     }
-    Start(){
+    Play(){
         let stack:cc.Node[] = [];
         let children = this.initPokerArea.children;
 
@@ -38,7 +38,8 @@ export default class GameView extends cc.Component {
         pokers.forEach((poker,index)=>{
             let uiPoker = this.creatUIPoker(poker);
             this.initPokerArea.addChild(uiPoker.node);
-            uiPoker.node.x = 0.5*index;
+            uiPoker.node.x = 0.25*index;
+            uiPoker.node.y = 0.25*index;
         });
     }
     creatUIPoker(poker:Poker):UIPoker{
@@ -47,5 +48,12 @@ export default class GameView extends cc.Component {
         let uiPoker = uiPokerNode.getComponent('UIPoker');
         uiPoker.init(poker);
         return uiPoker;
+     }
+     onEventInit(pokers){
+        this.initPokers(pokers);
+     }
+     onEventPlay(){
+         //数据驱动UI，通知view数据发生改变
+        this.Play();
      }
 }

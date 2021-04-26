@@ -3,7 +3,9 @@
 游戏牌局数据
 */
 
+import EventManager from "../../GameFrameWork/Event/EventManager";
 import { EPokerStatus, ESuit } from "../EnumConfig";
+import GameEvent from "./GameEvent";
 
 //扑克数据结构
 export class Poker{
@@ -28,6 +30,7 @@ export default class GameDB{
     /*************************************************************************
     *public static API
     **************************************************************************/
+   //因为需要传入监听参数，这里的a形参是强耦合
     public static creat():GameDB{
         let gamedb = new GameDB();
         return gamedb;
@@ -37,11 +40,12 @@ export default class GameDB{
     /*************************************************************************
     *public API
     **************************************************************************/
-    public Start(){
+    public Play(){
         let temp = this._closeAreaPokers;
         this._closeAreaPokers = this._pokers;
         this._pokers = temp;
         //通知UI层发生变化
+        EventManager.getInstance().emit(GameEvent.PLAY);
     }
 
    /*************************************************************************
@@ -64,6 +68,8 @@ export default class GameDB{
                 this._pokers.push(poker);
             }
         }
+        //派发初始化牌局的事件
+        EventManager.getInstance().emit(GameEvent.INIT_POKER,this._pokers);
     }
    /*************************************************************************
     *getter & setter
