@@ -1,3 +1,4 @@
+import UIUtil from "../../../GameFrameWork/Util/Util";
 import { EPokerStatus } from "../../EnumConfig";
 import UIPoker from "../../View/UIPoker/UIPoker";
 import GameDB, { Poker } from "../GameDB";
@@ -61,11 +62,8 @@ export default class GameView extends cc.Component {
      public OnEventInitGroupCard(cardIndex:number,groupIndex:number,poker:Poker){
         //先移动发牌区的牌到玩牌区
         let pokernode = poker.view.node;
-        let wp = pokernode.convertToWorldSpaceAR(cc.v2(0,0));
-        let pp = this.PlayAreaRoot.convertToNodeSpaceAR(wp);
-        pokernode.removeFromParent();
-        this.PlayAreaRoot.addChild(pokernode);
-        pokernode.setPosition(pp);
+        UIUtil.transformNode(pokernode,this.PlayAreaRoot);
+        
         if(poker.status == EPokerStatus.OPEN){
             let act1 = cc.tween().delay(1*groupIndex);
             let act2 = cc.tween().to(0.5,{position: cc.v2(85*cardIndex, -30*groupIndex)});
