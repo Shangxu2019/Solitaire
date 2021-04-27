@@ -1206,7 +1206,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "PlayAreaAnchor",
+    "_name": "PlayAreaRoot",
     "_objFlags": 0,
     "_parent": {
       "__id__": 31
@@ -1283,9 +1283,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -1410,7 +1408,7 @@
         "__id__": 26
       }
     ],
-    "PlayAreaAnchor": {
+    "PlayAreaRoot": {
       "__id__": 32
     },
     "_id": ""

@@ -6,6 +6,7 @@
 import EventManager from "../../GameFrameWork/Event/EventManager";
 import Model from "../../GameFrameWork/MVC/Model";
 import { EPokerStatus, ESuit } from "../EnumConfig";
+import UIPoker from "../View/UIPoker/UIPoker";
 import GameEvent from "./GameEvent";
 
 //扑克数据结构
@@ -13,19 +14,30 @@ export class Poker{
     public get point(){return this._point;}
     public get suit(){return this._suit;}
     public get status(){return this._status;}
+    public set status(statu){ this._status = statu;}
     public _point:number = -1; //点数
     public _suit:ESuit = ESuit.HEITAO;//花色
     public _status:EPokerStatus = EPokerStatus.CLOSE;//状态
-
+    private _view:UIPoker = null;
+    public get view(){return this._view;}
     constructor(ipoint?:number,isuit?:ESuit,istatus?:EPokerStatus){
         if(ipoint){ this._point = ipoint;}
         if(isuit){ this._suit = isuit ; }
         if(istatus){ this._status = istatus ; }
     }
+    public bind(view:UIPoker){
+        this._view = view;
+    }
+    public unBind(){
+        this._view = null;
+    }
 }
 export class PokerGroup{
     public get pokerGroup():Poker[]{ return this._pokerGroup;}
     private _pokerGroup:Poker[] = [];
+    public addPoker(poker){
+        this._pokerGroup.push(poker);
+    }
 }
 export default class GameDB extends Model{
     /*************************************************************************
@@ -62,6 +74,19 @@ export default class GameDB extends Model{
         this._pokers = temp;
         //通知UI层发生变化
         this.emit(GameEvent.PLAY);
+        //发牌
+        for(let cards = GameDB.CONST_PLAY_POKERGROUP;cards>=1;--cards){
+            for(let i = 0;i<cards;++i){
+                let cardGroupIndex = GameDB.CONST_PLAY_POKERGROUP - cards + i;
+                let cardGroup:PokerGroup = this._playAreaPokerGroup[cardGroupIndex];
+                let poker = this._closeAreaPokers[this._closeAreaPokers.length - 1];
+                this._closeAreaPokers.length = this._closeAreaPokers.length - 1;
+                poker.status = i === 0?EPokerStatus.OPEN:EPokerStatus.CLOSE;
+                cardGroup.addPoker(poker);
+                //每一行的第一张牌要翻起来(按行发牌)
+                this.emit(GameEvent.INIT_GROUP_CARD,cardGroupIndex,GameDB.CONST_PLAY_POKERGROUP-cards,poker);
+            }
+        }
     }
 
    /*************************************************************************

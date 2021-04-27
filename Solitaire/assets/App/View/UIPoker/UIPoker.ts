@@ -46,6 +46,7 @@ export default class UIPoker extends cc.Component{
     
 
     public init(poker:Poker){
+        poker.bind(this);
         this.pointLabel.string = `${poker_Map[poker.point]}`;
         this.pointLabel.node.color = (poker.suit == ESuit.FANGKUAI || poker.suit == ESuit.HONGXIN)?this.redPointLabel:this.blackPointLabel;
         this.smallSuitSprite.spriteFrame = this.smallSuits[poker.suit];
@@ -56,7 +57,7 @@ export default class UIPoker extends cc.Component{
         }
         this.setStatus(poker.status);
     }
-    private setStatus(status:EPokerStatus){
+    public setStatus(status:EPokerStatus){
         if(status ==  EPokerStatus.CLOSE){
             this.smallSuitSprite.node.active = false;
             this.bigSuitSprite.node.active = false;

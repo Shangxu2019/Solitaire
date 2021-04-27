@@ -1,5 +1,6 @@
+import { EPokerStatus } from "../../EnumConfig";
 import UIPoker from "../../View/UIPoker/UIPoker";
-import { Poker } from "../GameDB";
+import GameDB, { Poker } from "../GameDB";
 
 const {ccclass, property} = cc._decorator;
 @ccclass
@@ -15,11 +16,12 @@ export default class GameView extends cc.Component {
     //收牌
     @property([cc.Node]) ReceiveAreaList:cc.Node[] = [];
     //玩牌
-    @property(cc.Node) PlayAreaAnchor:cc.Node = null;
-    private PlayAreaOriginList:cc.Node[] = [];
+    @property(cc.Node) PlayAreaRoot:cc.Node = null;
 
+    onLoad(){
+        
+    }
     start () {
-
     }
     Play(){
         let stack:cc.Node[] = [];
@@ -49,11 +51,38 @@ export default class GameView extends cc.Component {
         uiPoker.init(poker);
         return uiPoker;
      }
-     onEventInit(pokers){
+     public onEventInit(pokers){
         this.initPokers(pokers);
      }
-     onEventPlay(){
+     public onEventPlay(){
          //数据驱动UI，通知view数据发生改变
         this.Play();
+     }
+     public OnEventInitGroupCard(cardIndex:number,groupIndex:number,poker:Poker){
+        //先移动发牌区的牌到玩牌区
+        let pokernode = poker.view.node;
+        let wp = pokernode.convertToWorldSpaceAR(cc.v2(0,0));
+        let pp = this.PlayAreaRoot.convertToNodeSpaceAR(wp);
+        pokernode.removeFromParent();
+        this.PlayAreaRoot.addChild(pokernode);
+        pokernode.setPosition(pp);
+        if(poker.status == EPokerStatus.OPEN){
+            let act1 = cc.tween().delay(1*groupIndex);
+            let act2 = cc.tween().to(0.5,{position: cc.v2(85*cardIndex, -30*groupIndex)});
+            let act3 = cc.tween().to(0.2,{scaleX:0});
+            let callFuc = cc.callFunc(()=>{
+                poker.view.setStatus(poker.status);
+            });
+            let act4 = cc.tween().to(0.2,{scaleX:1});
+            let act = cc.tween().sequence(act1,act2,act3,callFuc,act4);
+            cc.tween(pokernode).then(act).start();
+        }else{
+            let act1 = cc.tween().delay(1*groupIndex);
+            let act2 = cc.tween().to(0.5,{position: cc.v2(85*cardIndex, -30*groupIndex)});
+            let act = cc.tween().sequence(act1,act2);
+            cc.tween(pokernode).then(act).start();
+        }
+        
+
      }
 }

@@ -19,6 +19,7 @@ export default class GameCtrl{
         
         this.m_gameDB.on(GameEvent.INIT_POKER,this.m_gameView.onEventInit,this.m_gameView);
         this.m_gameDB.on(GameEvent.PLAY,this.m_gameView.onEventPlay,this.m_gameView);
+        this.m_gameDB.on(GameEvent.INIT_GROUP_CARD,this.m_gameView.OnEventInitGroupCard,this.m_gameView);
         
         this.m_gameDB.Init();
     }
@@ -30,5 +31,6 @@ export default class GameCtrl{
      public Exit(){
         this.m_gameDB.off(GameEvent.INIT_POKER,this.m_gameView.onEventInit);
         this.m_gameDB.off(GameEvent.PLAY,this.m_gameView.onEventPlay);
+        this.m_gameDB.off(GameEvent.INIT_GROUP_CARD,this.m_gameView.onEventPlay);
      }
 }
