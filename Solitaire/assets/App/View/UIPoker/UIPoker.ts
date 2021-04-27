@@ -1,6 +1,9 @@
 
+import View from "../../../GameFrameWork/MVC/View";
 import { EPokerStatus, ESuit } from "../../EnumConfig";
 import { Poker } from "../../GameScene/GameDB";
+import GameEvent from "../../GameScene/GameEvent";
+import GameView from "../../GameScene/GameView/GameView";
 const {ccclass, property} = cc._decorator;
 
 const poker_Map = {
@@ -19,7 +22,7 @@ const poker_Map = {
     '13':'K',
 }
 @ccclass
-export default class UIPoker extends cc.Component{
+export default class UIPoker extends View{
     @property(cc.Sprite)
     bgSprite:cc.Sprite = null;
     @property(cc.Sprite)
@@ -43,9 +46,19 @@ export default class UIPoker extends cc.Component{
     private redPointLabel:cc.Color = cc.color(183,24,40);    
     private blackPointLabel:cc.Color = cc.Color.BLACK;
 
-    
-
-    public init(poker:Poker){
+    private m_gameView:GameView = null;
+    private _poker:Poker = null;
+    public get poker(){ return this._poker;}
+    start(){
+        //注册触摸事件
+        this.node.on(cc.Node.EventType.TOUCH_START,this.onTouchStart,this);
+        this.node.on(cc.Node.EventType.TOUCH_MOVE,this.onTouchMove,this);
+        this.node.on(cc.Node.EventType.TOUCH_CANCEL,this.onTouchEnd,this);
+        this.node.on(cc.Node.EventType.TOUCH_END,this.onTouchEnd,this);
+    }
+    public init(poker:Poker,view:GameView){
+        this.m_gameView = view;
+        this._poker = poker;
         poker.bind(this);
         this.pointLabel.string = `${poker_Map[poker.point]}`;
         this.pointLabel.node.color = (poker.suit == ESuit.FANGKUAI || poker.suit == ESuit.HONGXIN)?this.redPointLabel:this.blackPointLabel;
@@ -71,4 +84,40 @@ export default class UIPoker extends cc.Component{
         }
              
     }
+    onDestroy(){
+        this.node.off(cc.Node.EventType.TOUCH_START,this.onTouchStart,this);
+        this.node.off(cc.Node.EventType.TOUCH_MOVE,this.onTouchMove,this);
+        this.node.off(cc.Node.EventType.TOUCH_CANCEL,this.onTouchEnd,this);
+        this.node.off(cc.Node.EventType.TOUCH_END,this.onTouchEnd,this);
+    }
+    /***************************************************************************
+    *event handle
+    ****************************************************************************/
+    onTouchStart(event){
+        console.log("ontouch start")
+    }
+    onTouchMove(event){
+        console.log("ontouch move")
+    }
+    onTouchEnd(event){
+        console.log("ontouch end")
+        //告知主管GameView小弟UIPoker有事
+        this.m_gameView.onClickUIPoker(this);
+    }
+    /**
+     * interface for uipoker
+     */
+    public isInPlayArea(){
+
+    }
+    public isOpen(){
+
+    }
+    public isTop(){
+
+    }
+    public isPoint(){
+
+    }
+    
 }

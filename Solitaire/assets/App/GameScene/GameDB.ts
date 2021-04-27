@@ -69,9 +69,12 @@ export default class GameDB extends Model{
         this.emit(GameEvent.INIT_POKER,this._pokers);
     }
     public Play(){
+        
         let temp = this._closeAreaPokers;
         this._closeAreaPokers = this._pokers;
         this._pokers = temp;
+        //洗牌
+        this.shuffle(this._closeAreaPokers,1000);
         //通知UI层发生变化
         this.emit(GameEvent.PLAY);
         //发牌
@@ -94,6 +97,15 @@ export default class GameDB extends Model{
     **************************************************************************/
     constructor(){
         super();
+    }
+    private shuffle(pokers:Poker[],count:number = 100){
+        for(let i = 0;i<count;++i){
+            let startIndex = parseInt('' + Math.random()*pokers.length,10);
+            let endIndex = parseInt('' + Math.random()*pokers.length,10);
+            let temp = pokers[startIndex];
+            pokers[startIndex] = pokers[endIndex];
+            pokers[endIndex] = temp;
+        }
     }
    /*************************************************************************
     *getter & setter

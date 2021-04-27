@@ -24,7 +24,7 @@ export default class Events{
      * @param {object} target target for call
      * @returns {function} unsubscribe  function
      */
-    public onece(name,func,target?){
+    public once(name,func,target?){
         let unsubscribe = undefined;
         unsubscribe = this.on(name,(...args:any[])=>{
             func.apply(target,args);
@@ -77,7 +77,7 @@ export default class Events{
     /**
      * @description clear marked listeners
      */
-    private clear(){
+    public clear(){
         for(let name in this.subscribes){
             this.subscribes[name] = this.subscribes[name].filter((v)=>!v.del)
         }

@@ -1,11 +1,13 @@
+import View from "../../../GameFrameWork/MVC/View";
 import UIUtil from "../../../GameFrameWork/Util/Util";
 import { EPokerStatus } from "../../EnumConfig";
 import UIPoker from "../../View/UIPoker/UIPoker";
 import GameDB, { Poker } from "../GameDB";
+import GameEvent from "../GameEvent";
 
 const {ccclass, property} = cc._decorator;
 @ccclass
-export default class GameView extends cc.Component {
+export default class GameView extends View {
     //牌预制
     @property(cc.Prefab) pokerPrefab:cc.Prefab = null;
     //初始化牌
@@ -49,7 +51,7 @@ export default class GameView extends cc.Component {
         //创建UIPoker
         let uiPokerNode = cc.instantiate(this.pokerPrefab);
         let uiPoker = uiPokerNode.getComponent('UIPoker');
-        uiPoker.init(poker);
+        uiPoker.init(poker,this);
         return uiPoker;
      }
      public onEventInit(pokers){
@@ -81,6 +83,26 @@ export default class GameView extends cc.Component {
             cc.tween(pokernode).then(act).start();
         }
         
+
+     }
+     /**
+      * interface for UIPoker
+      */
+     public onClickUIPoker(uipoker:UIPoker){
+        //1.这张牌在玩牌区
+        //2.这张牌是翻开的
+        //3.这张牌在最上方
+        //4.这张牌的点数是A
+        //-->这张牌可以移动到收牌区
+        if(uipoker.isInPlayArea()){
+            if(uipoker.isOpen()){
+                if(uipoker.isTop()){
+                    if(uipoker.isPoint(1)){
+                        this.emit(GameEvent.VM_POKER_MOVE_FROM_PLAYAREA_TO_RECEIVEAREA,uipoker.poker);
+                    }
+                }
+            }
+        }
 
      }
 }
