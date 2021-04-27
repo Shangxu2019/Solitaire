@@ -4,6 +4,7 @@
 */
 
 import EventManager from "../../GameFrameWork/Event/EventManager";
+import Model from "../../GameFrameWork/MVC/Model";
 import { EPokerStatus, ESuit } from "../EnumConfig";
 import GameEvent from "./GameEvent";
 
@@ -26,32 +27,16 @@ export class PokerGroup{
     public get pokerGroup():Poker[]{ return this._pokerGroup;}
     private _pokerGroup:Poker[] = [];
 }
-export default class GameDB{
+export default class GameDB extends Model{
     /*************************************************************************
     *public static API
     **************************************************************************/
-   //因为需要传入监听参数，这里的a形参是强耦合
-    public static creat():GameDB{
-        let gamedb = new GameDB();
-        return gamedb;
-    }
     public static readonly CONST_RECEIVE_POKERGROUP:number = 4;
     public static readonly CONST_PLAY_POKERGROUP:number = 7;
     /*************************************************************************
     *public API
     **************************************************************************/
-    public Play(){
-        let temp = this._closeAreaPokers;
-        this._closeAreaPokers = this._pokers;
-        this._pokers = temp;
-        //通知UI层发生变化
-        EventManager.getInstance().emit(GameEvent.PLAY);
-    }
-
-   /*************************************************************************
-    *private API
-    **************************************************************************/
-    constructor(){
+    public Init(){
         //初始化牌局结构
         for(let i = 0;i<GameDB.CONST_RECEIVE_POKERGROUP;++i){
             let pokergroup = new PokerGroup();
@@ -69,7 +54,21 @@ export default class GameDB{
             }
         }
         //派发初始化牌局的事件
-        EventManager.getInstance().emit(GameEvent.INIT_POKER,this._pokers);
+        this.emit(GameEvent.INIT_POKER,this._pokers);
+    }
+    public Play(){
+        let temp = this._closeAreaPokers;
+        this._closeAreaPokers = this._pokers;
+        this._pokers = temp;
+        //通知UI层发生变化
+        this.emit(GameEvent.PLAY);
+    }
+
+   /*************************************************************************
+    *private API
+    **************************************************************************/
+    constructor(){
+        super();
     }
    /*************************************************************************
     *getter & setter

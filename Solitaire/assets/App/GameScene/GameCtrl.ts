@@ -14,20 +14,21 @@ export default class GameCtrl{
     private m_gameView:GameView = null;
     public init(igameView:GameView){
         this.m_gameView = igameView;
-        
-        EventManager.getInstance().on(GameEvent.INIT_POKER,this.m_gameView.onEventInit,this.m_gameView);
-        EventManager.getInstance().on(GameEvent.PLAY,this.m_gameView.onEventPlay,this.m_gameView);
         //创建数据库
-        this.m_gameDB = GameDB.creat();
+        this.m_gameDB = new GameDB();
         
+        this.m_gameDB.on(GameEvent.INIT_POKER,this.m_gameView.onEventInit,this.m_gameView);
+        this.m_gameDB.on(GameEvent.PLAY,this.m_gameView.onEventPlay,this.m_gameView);
+        
+        this.m_gameDB.Init();
     }
 
-    public start():void{
+    public Play():void{
         //移动牌到发牌区
         this.m_gameDB.Play();
      }
      public Exit(){
-        EventManager.getInstance().off(GameEvent.INIT_POKER,this.m_gameView.onEventInit,this.m_gameView);
-        EventManager.getInstance().off(GameEvent.PLAY,this.m_gameView.onEventPlay,this.m_gameView);
+        this.m_gameDB.off(GameEvent.INIT_POKER,this.m_gameView.onEventInit);
+        this.m_gameDB.off(GameEvent.PLAY,this.m_gameView.onEventPlay);
      }
 }
