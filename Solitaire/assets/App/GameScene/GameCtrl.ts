@@ -1,4 +1,5 @@
 import EventManager from "../../GameFrameWork/Event/EventManager";
+import Ctrl from "../../GameFrameWork/MVC/Ctrl";
 import GameDB from "./GameDB";
 import GameEvent from "./GameEvent";
 import GameView from "./GameView/GameView";
@@ -6,7 +7,7 @@ import GameView from "./GameView/GameView";
 /*
 游戏牌局管理者
 */
-export default class GameCtrl{
+export default class GameCtrl extends Ctrl{
 
     //构建数据库
     private m_gameDB:GameDB = null;
@@ -16,10 +17,7 @@ export default class GameCtrl{
         this.m_gameView = igameView;
         //创建数据库
         this.m_gameDB = new GameDB();
-        
-        this.m_gameDB.on(GameEvent.INIT_POKER,this.m_gameView.onEventInit,this.m_gameView);
-        this.m_gameDB.on(GameEvent.PLAY,this.m_gameView.onEventPlay,this.m_gameView);
-        this.m_gameDB.on(GameEvent.INIT_GROUP_CARD,this.m_gameView.OnEventInitGroupCard,this.m_gameView);
+        this.m_gameView.bindModel(this.m_gameDB);
         
         this.m_gameDB.Init();
     }
@@ -29,8 +27,6 @@ export default class GameCtrl{
         this.m_gameDB.Play();
      }
      public Exit(){
-        this.m_gameDB.off(GameEvent.INIT_POKER,this.m_gameView.onEventInit);
-        this.m_gameDB.off(GameEvent.PLAY,this.m_gameView.onEventPlay);
-        this.m_gameDB.off(GameEvent.INIT_GROUP_CARD,this.m_gameView.onEventPlay);
+        this.m_gameView.unBindModel();
      }
 }

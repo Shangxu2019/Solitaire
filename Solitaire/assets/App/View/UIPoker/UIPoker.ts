@@ -100,24 +100,20 @@ export default class UIPoker extends View{
         console.log("ontouch move")
     }
     onTouchEnd(event){
-        console.log("ontouch end")
-        //告知主管GameView小弟UIPoker有事
+        // this.m_gameView.node.emit(GameEvent.CLICK_POKER,this._poker);
+        //这里就不通过事件派发的方式来处理，直接通知UIpoker的老发gameview来处理，如果涉及到数据再交由model处理
         this.m_gameView.onClickUIPoker(this);
     }
     /**
      * interface for uipoker
      */
-    public isInPlayArea(){
 
+    public isOpen():boolean{
+        return this._poker.status === EPokerStatus.OPEN;
     }
-    public isOpen(){
 
-    }
-    public isTop(){
-
-    }
-    public isPoint(){
-
+    public isPoint(point:number):boolean{
+        return this._poker.point === point;
     }
     
 }

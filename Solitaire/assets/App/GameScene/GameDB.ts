@@ -41,6 +41,12 @@ export class PokerGroup{
 }
 export default class GameDB extends Model{
     /*************************************************************************
+    *constructor
+    **************************************************************************/
+    constructor(){
+        super();
+    }
+    /*************************************************************************
     *public static API
     **************************************************************************/
     public static readonly CONST_RECEIVE_POKERGROUP:number = 4;
@@ -95,9 +101,7 @@ export default class GameDB extends Model{
    /*************************************************************************
     *private API
     **************************************************************************/
-    constructor(){
-        super();
-    }
+    
     private shuffle(pokers:Poker[],count:number = 100){
         for(let i = 0;i<count;++i){
             let startIndex = parseInt('' + Math.random()*pokers.length,10);
@@ -107,6 +111,32 @@ export default class GameDB extends Model{
             pokers[endIndex] = temp;
         }
     }
+    public onEventPokerMoveFromPlayAreaToReceiveArea(poker:Poker){
+        console.log(`GameDB:onEventPokerMoveFromPlayAreaToReceiveArea ${poker}`);
+    }
+    public isLocationPlayArea(poker:Poker):boolean{
+        //filter 方法用来迭代一个数组，并且按给出的条件过滤出符合的元素
+        //filter 方法传入一个回调函数，这个回调函数会携带一个参数，参数为当前迭代的项（我们叫它 val ）。
+        //回调函数返回 true 的项会保留在数组中，返回 false 的项会被过滤出数组
+        return this.playAreaPokerGroup.filter(
+            pg =>pg.pokerGroup.filter(
+                p=>p.point === poker.point && p.suit === poker.suit
+            ).length > 0 
+        ).length > 0;
+    }
+    public isIndexPlayAreaGroupTop(poker:Poker):boolean{
+        for(let pg of this.playAreaPokerGroup){
+            let pokers = pg.pokerGroup;
+            if(pokers.length > 0){
+                let p = pokers[pokers.length - 1];
+                if(p.point === poker.point && p.suit === poker.suit){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
    /*************************************************************************
     *getter & setter
     **************************************************************************/

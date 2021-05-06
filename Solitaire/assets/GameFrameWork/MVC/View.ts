@@ -1,26 +1,37 @@
-import Events from "../Base/Events";
-
+/**
+ * 视图基类
+ */
 const {ccclass, property} = cc._decorator;
 @ccclass
 export default class View extends cc.Component {
-    private m_Events:Events = null;
+    private m_Events:cc.EventTarget = null;
     /**
      * life cycle function
      */
     onLoad(){ 
-        this.m_Events = new Events();
+        this.m_Events = new cc.EventTarget();
     }
-    start(){}
     onDestroy(){
         this.m_Events.clear();
         this.m_Events = null;
     }
     /**
-     * restructure Events function
+     * restructure EventTarget function
      */
-     public on(name,func,target?){this.m_Events.on(name,func,target);}
-    public once(name,func,target?){this.m_Events.once(name,func,target);}
-    public emit(name,...args){this.m_Events.emit(name,...args);}
-    public off(name,func){this.m_Events.off(name,func);}
-    public clear(){this.m_Events.clear();}
+    public on(type: string, callback: Function, target?: any){
+        this.m_Events.on(type,callback,target);
+        
+    }
+    public off(type: string, callback?: Function, target?: any){
+        this.m_Events.off(type, callback, target);		
+    }
+    public once(type: string, callback: (arg1?: any, arg2?: any, arg3?: any, arg4?: any, arg5?: any) => void, target?: any){
+        this.m_Events.once(type,callback);		
+    }
+    public emit(key: string, arg1?: any, arg2?: any, arg3?: any, arg4?: any, arg5?: any){
+        this.m_Events.emit(key, arg1, arg2, arg3, arg4, arg5);	
+    }
+    public clear(){
+        this.m_Events.clear();
+    }
 }

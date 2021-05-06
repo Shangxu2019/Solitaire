@@ -1,6 +1,9 @@
-import Events from "../Base/Events";
+/**
+ * 数据基类
+ */
 
-
-export default class Model extends Events{
-
+export default class Model extends cc.EventTarget{
+    constructor(){
+        super();
+    }
 }

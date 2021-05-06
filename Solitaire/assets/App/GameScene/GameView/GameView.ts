@@ -1,3 +1,4 @@
+
 import View from "../../../GameFrameWork/MVC/View";
 import UIUtil from "../../../GameFrameWork/Util/Util";
 import { EPokerStatus } from "../../EnumConfig";
@@ -21,6 +22,8 @@ export default class GameView extends View {
     //玩牌
     @property(cc.Node) PlayAreaRoot:cc.Node = null;
 
+    private m_gameModel:GameDB = null;
+
     onLoad(){
         
     }
@@ -38,6 +41,19 @@ export default class GameView extends View {
         for(let i = stack.length-1;i>=0;--i){
             this.closeSendArea.addChild(stack[i]);
         }
+    }
+    public bindModel(model:GameDB){
+        this.m_gameModel = model;
+        this.m_gameModel.on(GameEvent.INIT_POKER,this.onEventInit,this);
+        this.m_gameModel.on(GameEvent.PLAY,this.onEventPlay,this);
+        this.m_gameModel.on(GameEvent.INIT_GROUP_CARD,this.OnEventInitGroupCard,this);
+        this.node.on(GameEvent.VM_POKER_MOVE_FROM_PLAYAREA_TO_RECEIVEAREA,this.m_gameModel.onEventPokerMoveFromPlayAreaToReceiveArea,this.m_gameModel);
+    }
+    public unBindModel(){
+        this.m_gameModel.off(GameEvent.INIT_POKER,this.onEventInit,this);
+        this.m_gameModel.off(GameEvent.PLAY,this.onEventPlay,this);
+        this.m_gameModel.off(GameEvent.INIT_GROUP_CARD,this.onEventPlay,this);
+        this.node.off(GameEvent.VM_POKER_MOVE_FROM_PLAYAREA_TO_RECEIVEAREA,this.m_gameModel.onEventPokerMoveFromPlayAreaToReceiveArea,this.m_gameModel);
     }
     public initPokers(pokers:Poker[]){
         pokers.forEach((poker,index)=>{
@@ -94,15 +110,22 @@ export default class GameView extends View {
         //3.这张牌在最上方
         //4.这张牌的点数是A
         //-->这张牌可以移动到收牌区
-        if(uipoker.isInPlayArea()){
+        if(this.isLocationPlayArea(uipoker)){
             if(uipoker.isOpen()){
-                if(uipoker.isTop()){
+                if(this.isIndexPlayAreaGroupTop(uipoker)){
                     if(uipoker.isPoint(1)){
-                        this.emit(GameEvent.VM_POKER_MOVE_FROM_PLAYAREA_TO_RECEIVEAREA,uipoker.poker);
+                        //UI不直接操作数据，而是发出操作数据的请求，交由数据库处理
+                        this.node.emit(GameEvent.VM_POKER_MOVE_FROM_PLAYAREA_TO_RECEIVEAREA,uipoker.poker);
                     }
                 }
             }
         }
 
      }
+     private isLocationPlayArea(uipoker:UIPoker):boolean{
+        return this.m_gameModel.isLocationPlayArea(uipoker.poker);
+    }
+    public isIndexPlayAreaGroupTop(uipoker:UIPoker):boolean{
+        return this.m_gameModel.isIndexPlayAreaGroupTop(uipoker.poker);
+    }
 }
